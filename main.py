@@ -29,6 +29,28 @@ def index():
   country_name,country_city = location_data['countryName'],location_data['city']
   return render_template('index.html',lat = user_lat,lon=user_lon,city=country_city,country=country_name,temp=temp_celcius,humid = humid)
 
+@app.route('/lander/', methods = ['GET','POST'])
+def main_page():
+  #Getting user lat and lon
+  user_lat = None
+  user_lon = None
+  if request.method == 'POST':
+    data = request.json
+    data_response = json.loads(data)
+    with open('static/user_loc.json', 'w') as f:
+        json.dump(data_response, f)
+  f_open = open('static/user_loc.json','r')
+  get_data = json.loads(f_open.read())
+  user_lat = get_data['lat']
+  user_lon = get_data['lon']
+  
+  weather_data= get_weather(user_lat,user_lon)
+  temp,humid = weather_data['main']['temp'],weather_data['main']['humidity']
+  temp_celcius = round(temp - 272.15,2)
+  location_data = get_country(user_lat,user_lon)
+  country_name,country_city = location_data['countryName'],location_data['city']
+  return render_template('index.html',lat = user_lat,lon=user_lon,city=country_city,country=country_name,temp=temp_celcius,humid = humid)
+
 #Project page
 @app.route('/projects/')
 def projects():
