@@ -3285,6 +3285,11 @@ body.is-preload #banner p {
   align-items: center;
   text-align: center;
 }
+.flex-column.left {
+  justify-content: center;
+  align-items: start;
+  text-align: start;
+}
 
 .custom-images {
   border-radius: 100%;
